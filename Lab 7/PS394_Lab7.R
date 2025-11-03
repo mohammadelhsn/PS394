@@ -4,6 +4,7 @@
 data <- read.csv("PS394 Class Dataset F2025_ME.csv")
 
 library(psych)
+library(Hmisc)
 
 ###1) Compute a variable ----
 
@@ -42,14 +43,34 @@ alpha(items_SC) #get the alpha for the scale items
 
 describe(data$SC_mean)
 
+## 
+
+# Reverse this
+data$SOC_2_r <- (5-data$SOC_2)
+# Reverse this
+data$SOC6_1_r <- (5-data$SOC6_1)
+# Reverse this
+data$SOC11_1_r <- (5-data$SOC11_1)
+
+# Define it so we don't have to do it twice
+items_SOC <- cbind(data$SOC_1, data$SOC_2_r, data$SOC_3, data$SOC5_1, data$SOC6_1_r, data$SOC7_1, data$SOC10_1 ,data$SOC11_1_r)
+
+alpha(items_SC) #get the alpha for the scale items
+
+# Find the mean
+data$SOC_mean <- rowMeans(items_SOC)
+
 ###3) Run a simple linear regression ----
 
 #center your variables (if you want/need to) - 2 options
 data$SC_meanc <- (data$SC_mean - mean(data$SC_mean, na.rm=TRUE)) #mean center your variable
 data$zSC_mean <- ((data$SC_mean - mean(data$SC_mean, na.rm=TRUE))/sd(data$SC_mean, na.rm=TRUE)) #convert you variable to z scores
 
+data$SOC_meanc <- (data $SOC_mean - mean(data$SOC_mean, na.rm=TRUE))
+data$zSOC_mean <- ((data$SOC_mean - mean(data$SOC_mean, na.rm=TRUE))/sd(data$SOC_mean, na.rm=TRUE)) #convert you variable to z scores
+
 # lm is a regression
-model1 <- lm(GPA ~ SC_mean, data = data)
+model1 <- lm(GPA ~ SC_mean, data = data) # ~ = predicting VAR based on following  
 summary(model1) #model with uncentered
 
 model1c <- lm(GPA ~ SC_meanc, data = data)
@@ -57,4 +78,13 @@ summary(model1c) #model with mean centered
 
 model1z <- lm(GPA ~ zSC_mean, data = data)
 summary(model1z) #model with z scores
+
+model2 <- lm(GPA ~ SOC_mean, data=data)
+summary(model2)
+
+model2c <- lm(GPA ~ SOC_meanc, data=data)
+summary(model2c)
+
+model2z <- lm(GPA ~ zSOC_mean, data=data)
+summary(model2z)
 
