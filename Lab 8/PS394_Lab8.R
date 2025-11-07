@@ -1,10 +1,11 @@
 
 #use your code from previous lab to set your working directory and load the lab data
 
-data <- read.csv("PS394 Class Dataset F2025_ME.csv")
-
 library(psych)
 library(Hmisc)
+
+## read the data
+data <- read.csv("PS394 Class Dataset F2025_ME.csv")
 
 ###1) Compute a variable ----
 
@@ -35,7 +36,7 @@ data$SC_11r<- (6-data$SC_11) #create a new variable(column) ‘SC_11r’
 data$SC_mean<- rowMeans(cbind(data$SC_1r, data$SC_2r, data$SC_3r, data$SC_4, data$SC_5, data$SC_6r, data$SC_7, data$SC_8r, data$SC_9, data$SC_10, data$SC_11r, data$SC_12)) #create a new variable (columm) SC_mean that is equal to the average of the scale items - be sure to use the reverse coded items for reverse items!!!
 
 ##Step 3: Check the reliability
-items_SC <- cbind(data$SC_1r, data$SC_2r, data$SC_3r, data$SC_4, data$SC_5, data$SC_6r,data$SC_7,  data$SC_8r, data$SC_9, data$SC_10, data$SC_11r, data$SC_12) #create a data subset containing only the items used to compute your scale
+items_SC <- cbind(data$SC_1r, data$SC_2r, data$SC_3r, data$SC_4, data$SC_5, data$SC_6r, data$SC_7, data$SC_8r, data$SC_9, data$SC_10, data$SC_11r, data$SC_12) #create a data subset containing only the items used to compute your scale
 alpha(items_SC) #get the alpha for the scale items
 
 
@@ -43,48 +44,77 @@ alpha(items_SC) #get the alpha for the scale items
 
 describe(data$SC_mean)
 
-## 
+###3) Run a multiple regression ----
 
-# Reverse this
-data$SOC_2_r <- (5-data$SOC_2)
-# Reverse this
-data$SOC6_1_r <- (5-data$SOC6_1)
-# Reverse this
-data$SOC11_1_r <- (5-data$SOC11_1)
-
-# Define it so we don't have to do it twice
-items_SOC <- cbind(data$SOC_1, data$SOC_2_r, data$SOC_3, data$SOC5_1, data$SOC6_1_r, data$SOC7_1, data$SOC10_1 ,data$SOC11_1_r)
-
-alpha(items_SC) #get the alpha for the scale items
-
-# Find the mean
-data$SOC_mean <- rowMeans(items_SOC)
-
-###3) Run a simple linear regression ----
-
-#center your variables (if you want/need to) - 2 options
-data$SC_meanc <- (data$SC_mean - mean(data$SC_mean, na.rm=TRUE)) #mean center your variable
+##simple linear regression
+#center your variables (if you want/need to) - using z score method here
 data$zSC_mean <- ((data$SC_mean - mean(data$SC_mean, na.rm=TRUE))/sd(data$SC_mean, na.rm=TRUE)) #convert you variable to z scores
 
+#get scatterplots for your variables
+plot(data$GPA ~ data$zSC_mean, data = data) #get a scatterplot with self compassion on the x axis and GPA on the y axis
+
+#run regression
+model1 <- lm(GPA ~ zSC_mean, data = data)
+summary(model1) #simple linear regression with self-compassion only
+
+##### MULTIPLE REGRESSION ######
+
+#center your additional variables (if you want/need to) - using z score method here
+data$zExercise <- ((data$Exercise - mean(data$Exercise, na.rm=TRUE))/sd(data$Exercise, na.rm=TRUE)) #convert you variable to z scores
+
+#get scatterplot for your additional variables
+plot(data$GPA ~ data$zExercise, data = data) #get a scatterplot with self compassion on the x axis and GPA on the y axis
+
+#run regression
+model2 <- lm(GPA ~ zSC_mean + zExercise, data = data)
+summary(model2) #multiple regression with self-compassion and exercise
+
+#compare models: Rsquare change = 0.03472 (R2 from model1) - 0.02838 (R2 from model2) = 0.00634 (0.634%)
+anova(model1, model2) #compare the models - p value for R square change
+
+
+
+##### PRACTICE
+
+# Reverse the scores. 
+data$SOC_2_r <- (5-data$SOC_2)
+data$SOC6_1_r <- (5-data$SOC6_1)
+data$SOC11_1_r <- (5-data$SOC11_1)
+
+# Define this
+items_SOC <- cbind(data$SOC_1, data$SOC_2_r, data$SOC_3, data$SOC5_1, data$SOC6_1_r, data$SOC7_1, data$SOC10_1 ,data$SOC11_1_r)
+
+# Calculate the alpha.
+alpha(items_SC)
+
+# Define the mean 
+data$SOC_mean <- rowMeans(items_SOC)
+
+# Center the mean
+data$SC_meanc <- (data$SC_mean - mean(data$SC_mean, na.rm=TRUE)) 
+data$zSC_mean <- ((data$SC_mean - mean(data$SC_mean, na.rm=TRUE))/sd(data$SC_mean, na.rm=TRUE))
+
+# Center the mean
 data$SOC_meanc <- (data $SOC_mean - mean(data$SOC_mean, na.rm=TRUE))
-data$zSOC_mean <- ((data$SOC_mean - mean(data$SOC_mean, na.rm=TRUE))/sd(data$SOC_mean, na.rm=TRUE)) #convert you variable to z scores
+data$zSOC_mean <- ((data$SOC_mean - mean(data$SOC_mean, na.rm=TRUE))/sd(data$SOC_mean, na.rm=TRUE))
 
-# lm is a regression
-model1 <- lm(GPA ~ SC_mean, data = data) # ~ = predicting VAR based on following  
-summary(model1) #model with uncentered
+plot(data$GPA ~ data$zSOC_mean)
 
-model1c <- lm(GPA ~ SC_meanc, data = data)
-summary(model1c) #model with mean centered
+# Create model 3
+model3 <- lm(data$GPA ~ data$zSOC_mean, data=data)
+summary(model3)
 
-model1z <- lm(GPA ~ zSC_mean, data = data)
-summary(model1z) #model with z scores
+# Convert to Z-Score
+data$zAge <- ((data$Age - mean(data$Age, na.rm=TRUE))/sd(data$Age, na.rm=TRUE))
 
-model2 <- lm(GPA ~ SOC_mean, data=data)
-summary(model2)
+plot(data$GPA ~ data$zAge, data=data)
 
-model2c <- lm(GPA ~ SOC_meanc, data=data)
-summary(model2c)
+### MULTIPLE REGRESSION ####
 
-model2z <- lm(GPA ~ zSOC_mean, data=data)
-summary(model2z)
+# Define Model 4
+model4 <- lm(data$GPA ~ data$zSOC_mean + data$zAge, data = data)
+summary(model4) 
+
+# Run the ANOVA
+anova(model3, model4) 
 
