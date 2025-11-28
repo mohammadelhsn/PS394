@@ -1,29 +1,8 @@
-
-#use your code from previous lab to set your working directory and load the lab data
-
-#use your code from previous lab to set your working directory and load the lab data
-
 library(psych)
 library(Hmisc)
 
 ## read the data
 data <- read.csv("PS394 Class Dataset F2025_ME.csv")
-
-###1) Compute your variables ----
-
-##The self-compassion scale includes items SC_1 through SC_12. Items are rated 1 (almost never) through 5 (almost always). Items 1, 2, 3, 6, 8, 11 are reverse coded. The items and labels are below for reference. 
-#SC_1: I’m disapproving and judgmental about my own flaws and inadequacies. (R)
-#SC_2: When I’m feeling down I tend to obsess and fixate on everything that’s wrong. (R)
-#SC_3: When I fail at something important to me I become consumed by feelings of inadequacy.(R)
-#SC_4: When something upsets me I try to keep my emotions in balance.
-#SC_5: When I feel inadequate in some way, I try to remind myself that feelings of inadequacy are shared by most people.
-#SC_6: I’m intolerant and impatient towards those aspects of my personality I don't like. (R)
-#SC_7: When I’m going through a very hard time, I give myself the caring and tenderness I need.
-#SC_8: When I’m feeling down, I tend to feel like most other people are probably happier than I am. (R)
-#SC_9: When something painful happens I try to take a balanced view of the situation.
-#SC_10: I try to see my failings as part of the human condition.
-#SC_11: When I fail at something that's important to me, I tend to feel alone in my failure. (R)
-#SC_12: I try to be understanding and patient towards those aspects of my personality I don't like
 
 ##Step 1: Reverse code reversed items
 
