@@ -15,7 +15,7 @@ This repository contains my coursework, assignments, and projects for **PS394 - 
 | Technology   | Icon                                                                       |
 | ------------ | -------------------------------------------------------------------------- |
 | R            | ![R](https://go-skill-icons.vercel.app/api/icons?i=r)                      |
-| RStudio      | ![RStudio]([https://go-skill-icons.vercel.app/api/icons?i=r](https://posit.co/download/rstudio-desktop/)) |
+| RStudio      | [RStudio]([https://go-skill-icons.vercel.app/api/icons?i=r](https://posit.co/download/rstudio-desktop/)) |
 
 
 ## 📂 Repository Structure
