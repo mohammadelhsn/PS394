@@ -10,12 +10,12 @@
 
 This repository contains my coursework, assignments, and projects for **PS394 - Linear Models** at **Wilfrid Laurier University**. The course covers statistical modeling using **linear regression**, including theory, implementation, and interpretation of models in **R**. Topics include multiple regression.
 
-## Stack
+## 🛠️ Stack
 
-| Technology | Icon                                                                |
-| ---------- | ------------------------------------------------------------------- |
-| R   | ![R](https://go-skill-icons.vercel.app/api/icons?i=R)                      |
-| R   | ![RStudio](https://go-skill-icons.vercel.app/api/icons?i=Rstudio)          |
+| Technology   | Icon                                                                       |
+| ------------ | -------------------------------------------------------------------------- |
+| R            | ![R](https://go-skill-icons.vercel.app/api/icons?i=r)                      |
+
 
 ## 📂 Repository Structure
 
